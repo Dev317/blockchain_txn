@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func main () {
+func main() {
 
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
@@ -47,41 +47,41 @@ func main () {
 	from_account := common.HexToAddress(config.Ethereum.FromAccount.Address)
 	to_account := common.HexToAddress(config.Ethereum.ToAccount.Address)
 
-    from_balance, err := client.BalanceAt(context.Background(), from_account, nil)
-    if err != nil {
-        slog.Error("Error getting balance", err)
-    }
+	from_balance, err := client.BalanceAt(context.Background(), from_account, nil)
+	if err != nil {
+		slog.Error("Error getting balance", err)
+	}
 
-    slog.Info(fmt.Sprintf("Address %s has balance: %s wei", from_account.String(), from_balance.String()))
+	slog.Info(fmt.Sprintf("Address %s has balance: %s wei", from_account.String(), from_balance.String()))
 
 	to_balance, err := client.BalanceAt(context.Background(), to_account, nil)
-    if err != nil {
-        slog.Error("Error getting balance", err)
-    }
+	if err != nil {
+		slog.Error("Error getting balance", err)
+	}
 
-    slog.Info(fmt.Sprintf("Address %s has balance: %s wei", to_account.String(), to_balance.String()))
+	slog.Info(fmt.Sprintf("Address %s has balance: %s wei", to_account.String(), to_balance.String()))
 
 	amount := big.NewInt(1000000)
 
 	slog.Debug("Sending transaction...")
 	utils.Send(config.Ethereum.FromAccount.PrivateKey,
-			   config.Ethereum.ToAccount.Address,
-			   amount,
-			   client)
+		config.Ethereum.ToAccount.Address,
+		amount,
+		client)
 	slog.Info("Transaction sent successfully")
 
 	time.Sleep(30 * time.Second)
 	from_balance, err = client.BalanceAt(context.Background(), from_account, nil)
-    if err != nil {
-        slog.Error("Error getting balance", err)
-    }
+	if err != nil {
+		slog.Error("Error getting balance", err)
+	}
 
-    slog.Info(fmt.Sprintf("Address %s has balance: %s wei", from_account.String(), from_balance.String()))
+	slog.Info(fmt.Sprintf("Address %s has balance: %s wei", from_account.String(), from_balance.String()))
 
 	to_balance, err = client.BalanceAt(context.Background(), to_account, nil)
-    if err != nil {
-        slog.Error("Error getting balance", err)
-    }
+	if err != nil {
+		slog.Error("Error getting balance", err)
+	}
 
-    slog.Info(fmt.Sprintf("Address %s has balance: %s wei", to_account.String(), to_balance.String()))
+	slog.Info(fmt.Sprintf("Address %s has balance: %s wei", to_account.String(), to_balance.String()))
 }
