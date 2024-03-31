@@ -11,25 +11,23 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
+	"github.com/Dev317/go_blockchain/blockchain/btc"
 	"github.com/Dev317/go_blockchain/blockchain/eth"
 	"github.com/Dev317/go_blockchain/config"
 	"github.com/spf13/viper"
 )
 
-func main() {
+func sendTxnBtc(config config.Config) {
+	btcutils.SendTxn(
+		config.Bitcoin.PrevTxHash,
+		uint(0),
+		config.Bitcoin.WIF,
+		config.Bitcoin.DestAddr,
+		1000,
+	)
+}
 
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
-	viper.SetConfigType("yaml")
-
-	if err := viper.ReadInConfig(); err != nil {
-		slog.Error("Error reading config file", err)
-		os.Exit(1)
-	}
-
-	var config config.Config
-	viper.Unmarshal(&config)
-
+func sendTxnEth(config config.Config) {
 	client, err := ethclient.Dial(config.Ethereum.RpcURL)
 	if err != nil {
 		slog.Error("Error connecting to Ethereum testnet", err)
@@ -64,7 +62,7 @@ func main() {
 	amount := big.NewInt(1000000)
 
 	slog.Debug("Sending transaction...")
-	utils.Send(config.Ethereum.FromAccount.PrivateKey,
+	ethutils.Send(config.Ethereum.FromAccount.PrivateKey,
 		config.Ethereum.ToAccount.Address,
 		amount,
 		client)
@@ -84,4 +82,22 @@ func main() {
 	}
 
 	slog.Info(fmt.Sprintf("Address %s has balance: %s wei", to_account.String(), to_balance.String()))
+}
+
+func main() {
+
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	viper.SetConfigType("yaml")
+
+	if err := viper.ReadInConfig(); err != nil {
+		slog.Error("Error reading config file", err)
+		os.Exit(1)
+	}
+
+	var config config.Config
+	viper.Unmarshal(&config)
+
+	// sendTxnEth(config)
+	sendTxnBtc(config)
 }

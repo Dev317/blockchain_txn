@@ -1,0 +1,6 @@
+base58==2.1.1
+bech32==1.2.0
+bitcoinaddress==0.1.5
+ecdsa==0.18.0
+pycryptodome==3.20.0
+six==1.16.0

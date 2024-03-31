@@ -2,6 +2,13 @@ package config
 
 type Config struct {
     Ethereum Ethereum `mapstructure:"ethereum"`
+    Bitcoin Bitcoin `mapstructure:"bitcoin"`
+}
+
+type Bitcoin struct {
+    PrevTxHash string `mapstructure:"prev_tx_hash"`
+    WIF string `mapstructure:"wif"`
+    DestAddr string `mapstructure:"dest_addr"`
 }
 
 type Ethereum struct {
